@@ -12,22 +12,40 @@ class ShapeGame extends Component {
   }
 
   render() {
-    return(
-      <View>
+    return (
+      <View style={styles.game}>
         <Text style={styles.text}>Find the Odd Shape!</Text>
-        <Shape shapeNum={0} transform={[{translate: [0, 0, -5]}]}/>
+        {/* <Shape shapeNum={0} transform={[{translate: [0, 0, -5]}]}/> */}
+        {
+          this.state.gameShapes.map((shape, index) => {
+            return (
+              <View key={index}>
+                <Shape
+                  shapeNum={shape}
+                  colorNum={index}
+                  transform={[{translate: [(index-1.5)*1.5, 0, -5]}]}
+                />
+              </View>
+            )
+          })
+        }
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  game: {
+    transform: [
+      {translate: [-2.25, 0, 0]}
+    ]
+  },
   text: {
     fontSize: 0.5,
     textAlign: 'center',
     color: '#fff',
     transform: [
-      {translate: [0, 2, -5]}
+      { translate: [0, 2, -5] }
     ]
   }
 })
