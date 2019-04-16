@@ -88,7 +88,6 @@ class ShapeGame extends Component {
 
 const styles = StyleSheet.create({
   game: {
-    alignContent: 'center',
     transform: [
       { translate: [-2.25, 0, 0] }
     ]
