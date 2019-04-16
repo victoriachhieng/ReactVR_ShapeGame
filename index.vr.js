@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, AppRegistry, StyleSheet } from 'react-vr';
+
 import Shape, { shapes } from './vr/components/Shape';
 
 class ShapeGame extends Component {
@@ -7,11 +8,25 @@ class ShapeGame extends Component {
     super();
 
     this.state = {
-      gameShapes: [1, 1, 1, 1]
+      gameShapes: [1, 1, 1, 1],
+      score: 0,
+      specialIndex: 0
     }
   }
 
   componentDidMount() {
+    this.newGameSet();
+  }
+
+  pickShape(shapeIndex) {
+    console.log('shapeIndex', shapeIndex);
+
+    let score = this.state.score;
+
+    score = this.state.specialIndex === shapeIndex ? score + 1 : score - 1;
+
+    this.setState({score});
+
     this.newGameSet();
   }
 
@@ -24,27 +39,35 @@ class ShapeGame extends Component {
     }
 
     let newGameShapes = [];
-    for (let i = 0; i < this.state.gameShapes.length; i++)
+    for (let i = 0; i < this.state.gameShapes.length; i++) {
       newGameShapes[i] = baseShapeId;
+    }
 
     let specialIndex = Math.floor(Math.random() * newGameShapes.length);
-    newGameShapes[specialIndex] = specialIndex;
+    newGameShapes[specialIndex] = specialShapeId;
 
-    this.setState({ gameShapes: newGameShapes })
+    this.setState({ 
+      gameShapes: newGameShapes,
+      specialIndex: specialIndex
+     });
   }
 
   render() {
     return (
       <View style={styles.game}>
         <Text style={styles.text}>Find the Odd Shape!</Text>
+        <Text style={styles.text}>{this.state.score}</Text>
         {
           this.state.gameShapes.map((shape, index) => {
             return (
-              <View key={index}>
+              <View 
+                key={index}
+                onEnter={() => this.pickShape(index)}
+                >
                 <Shape
                   shapeNum={shape}
                   colorNum={index}
-                  transform={[{ translate: [(index - 1.5) * 1.5, 0, -5] }]}
+                  transform={[{ translate: [(index-1.5)*1.5, 0, -5]}]}
                 />
               </View>
             )
@@ -69,6 +92,6 @@ const styles = StyleSheet.create({
       { translate: [0, 2, -5] }
     ]
   }
-})
+});
 
 AppRegistry.registerComponent('ShapeGame', () => ShapeGame);
